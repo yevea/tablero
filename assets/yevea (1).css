@@ -1,0 +1,246 @@
+/* /public_html/assets/yevea.css */
+:root {
+  --color-primary: #000;
+  --color-text: #333;
+  --color-trust: #555;
+  --color-line: #ccc;
+  --color-light: #f9f7f3;
+  --color-bg: #fff;
+  --radius: 0px;
+  --shadow: none;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+a {
+  text-decoration: none;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 4px 0;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  box-sizing: border-box;
+  background: var(--color-light);
+}
+
+
+/* Vertical container */
+
+.container{
+margin: 0 auto;
+max-width: 600px;
+}
+
+/* Topnav */
+.navbar {
+  overflow: hidden;
+  background: var(--color-primary);
+}
+
+.navbar a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: .25rem .5rem;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: right;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  border: none;
+  outline: none;
+  color: white;
+  padding: .5rem 1rem;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: gray;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: .5rem 1rem;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Header */
+header.yevea {
+  background-color: var(--color-primary);
+  color: var(--color-light);
+}
+
+header.yevea h1 {
+  margin: 0;
+  padding: 1rem 0;
+  font-size: 2.5rem;
+  line-height: 1.1;
+}
+
+header.yevea h1 strong {
+  font-weight: 900;
+}
+
+header.yevea p {
+  margin: 0;
+  padding: 0 0 1rem 0;
+  font-style: italic;
+}
+
+header.yevea a {
+  color: var(--color-bg);
+}
+
+.trust-line {
+  font-size: 0.85em;
+  color: var(--color-trust);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* Button style */
+
+button {
+    padding: 8px;
+    margin: 4px 0;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    background: var(--color-light);
+}
+
+
+.button-container {
+  margin: 1rem;
+  text-align: center;
+}
+
+button.button-yevea {
+  border-radius: var(--radius);
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin: .25rem auto;
+  padding: 1rem;
+  display: block;
+  font-size: 1.125em;
+}
+
+/* Carrito */
+.cart-item {
+  border-bottom: 1px solid var(--color-line);
+  padding: 12px 0;
+  font-size: 0.95em;
+}
+
+.cart-item button {
+  margin-left: 10px;
+  background: var(--color-light);
+}
+
+.cart-item button:hover {
+  background: #e0deda;
+}
+
+/* SVG del tablero */
+#board-svg {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+/* Resumen */
+#edgesSummary, #usageSummary, #observationsSummary {
+  font-size: 0.95em;
+  margin: 10px 0;
+  color: #444;
+  font-weight: 500;
+}
+
+/* Alineacion consistente para contenedores de radio buttons */
+.radio-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+.radio-group input[type="radio"] {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.radio-group label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.95em;
+}
+
+.radio-group label span {
+  white-space: nowrap;
+}
+
+/* Footer */
+footer.yevea {
+  background-color: var(--color-light);
+  border-top: 1px solid var(--color-line);
+  color: var(--color-trust);
+  text-align: center;
+  padding: 0.75rem 0;
+  font-size: 0.9em;
+}
+
+footer.yevea a {
+  color: var(--color-text);
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+  header.yevea h1 { font-size: 2rem; }
+  .topnav #logo { width: 80px; }
+  #board-svg { max-width: 180px; }
+  .trust-line { font-size: 0.8em; }
+  main { padding: 0 0.8rem; }
+}
