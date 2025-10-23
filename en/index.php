@@ -1,3 +1,103 @@
+<?php
+// en/olive-wood-countertop/index.php
+session_start();
+
+// Debugging (remove after fixing)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Include files
+try {
+    require_once '../../assets/config.php';
+    require_once '../../lib/stripe/init.php';
+} catch (Exception $e) {
+    error_log('Include Error: ' . $e->getMessage());
+    die('Server error. Please try again later.');
+}
+
+\Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
+
+// Handle POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $error = null;
+    if (isset($_POST['action']) && $_POST['action'] === 'add_to_cart') {
+        // Validate form data
+        $length = filter_input(INPUT_POST, 'length', FILTER_VALIDATE_FLOAT);
+        $width = filter_input(INPUT_POST, 'width', FILTER_VALIDATE_FLOAT);
+        $thickness = filter_input(INPUT_POST, 'thickness', FILTER_VALIDATE_FLOAT);
+        $edges = $_POST['edges'] ?? []; // Array or fallback
+        $usage = filter_input(INPUT_POST, 'usage', FILTER_DEFAULT) ?? '';
+        $usage = htmlspecialchars($usage, ENT_QUOTES, 'UTF-8'); // Sanitize for XSS
+
+        // Check for valid inputs
+        if (!$length || !$width || !$thickness || $length <= 0 || $width <= 0 || $thickness <= 0) {
+            $error = 'Please provide valid dimensions.';
+        } else {
+            // Calculate price (using your pricing logic from tablero.js)
+            $prices_per_m2 = [3 => 900, 5 => 1200, 7 => 1500];
+            $area = ($length / 100) * ($width / 100); // Convert cm to m²
+            $price = $area * ($prices_per_m2[$thickness] ?? 900);
+
+            // Initialize cart
+            if (!isset($_SESSION['cart'])) {
+                $_SESSION['cart'] = [];
+            }
+
+            // Add item to cart
+            $_SESSION['cart'][] = [
+                'name' => 'Custom Olive Wood Countertop',
+                'description' => "Dimensions: {$length}x{$width}x{$thickness} cm | Edges: " . implode(', ', (array)$edges) . " | Usage: $usage",
+                'price' => $price,
+                'quantity' => 1
+            ];
+        }
+    } elseif (isset($_POST['action']) && $_POST['action'] === 'checkout') {
+        // Validate cart
+        if (empty($_SESSION['cart'])) {
+            $error = 'Cart is empty.';
+        } else {
+            $total = array_sum(array_column($_SESSION['cart'], 'price'));
+            if ($total * 100 < MIN_ORDER_AMOUNT) {
+                $error = 'Minimum order is 175 €.';
+            } else {
+                try {
+                    $line_items = [];
+                    foreach ($_SESSION['cart'] as $item) {
+                        $line_items[] = [
+                            'price_data' => [
+                                'currency' => CURRENCY,
+                                'product_data' => [
+                                    'name' => $item['name'],
+                                    'description' => $item['description'],
+                                ],
+                                'unit_amount' => $item['price'] * 100,
+                            ],
+                            'quantity' => $item['quantity'],
+                        ];
+                    }
+$session = \Stripe\Checkout\Session::create([
+    'payment_method_types' => ['card'],
+    'line_items' => $line_items,
+    'mode' => 'payment',
+    'success_url' => 'https://yevea.com/en/success.php?session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url' => 'https://yevea.com/en/cancel.php',
+]);
+                    header('Location: ' . $session->url);
+                    exit;
+                } catch (\Stripe\Exception\ApiErrorException $e) {
+                    error_log('Stripe Error: ' . $e->getMessage());
+                    $error = 'Payment error: ' . htmlspecialchars($e->getMessage());
+                } catch (Exception $e) {
+                    error_log('General Error: ' . $e->getMessage());
+                    $error = 'Error: ' . htmlspecialchars($e->getMessage());
+                }
+            }
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
