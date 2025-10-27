@@ -2,15 +2,10 @@
 // en/olive-wood-countertop/index.php
 session_start();
 
-// Debugging (remove after fixing)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // Include files
 try {
-    require_once '../../assets/config.php';
-    require_once '../../lib/stripe/init.php';
+    require_once 'assets/config.php';
+    require_once 'stripe/init.php';
 } catch (Exception $e) {
     error_log('Include Error: ' . $e->getMessage());
     die('Server error. Please try again later.');
@@ -46,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Add item to cart
             $_SESSION['cart'][] = [
-                'name' => 'Custom Olive Wood Countertop',
+                'name' => 'Custom Olive Woodtop',
                 'description' => "Dimensions: {$length}x{$width}x{$thickness} cm | Edges: " . implode(', ', (array)$edges) . " | Usage: $usage",
                 'price' => $price,
                 'quantity' => 1
