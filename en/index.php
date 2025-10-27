@@ -1,11 +1,11 @@
 <?php
-// en/olive-wood-countertop/index.php
+// en/index.php
 session_start();
 
 // Include files
 try {
-    require_once '/assets/config.php';
-    require_once '/stripe/init.php';
+    require_once 'assets/config.php';
+    require_once 'stripe/init.php';
 } catch (Exception $e) {
     error_log('Include Error: ' . $e->getMessage());
     die('Server error. Please try again later.');
